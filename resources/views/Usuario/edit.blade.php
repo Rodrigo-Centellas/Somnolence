@@ -12,7 +12,7 @@
                 <i class="fa fa-arrow-left me-1"></i> Back
               </a>
             </div>
-            <div class="card-body ps-5 px-4 pt-4 pb-2">
+            <div class="card-body ps-12  px-4 pt-4 pb-2">
               <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\RutaController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
@@ -52,3 +53,8 @@ Route::post('/rutas',               [RutaController::class, 'store'])->name('rut
 Route::get('/rutas/{ruta}/edit',    [RutaController::class, 'edit'])->name('rutas.edit');
 Route::put('/rutas/{ruta}',         [RutaController::class, 'update'])->name('rutas.update');
 Route::delete('/rutas/{ruta}',      [RutaController::class, 'destroy'])->name('rutas.destroy');
+
+
+
+Route::get('/mapa', [MapController::class, 'index'])->name('map.index');
+Route::get('/api/gps-tracker', [MapController::class, 'apiGpsData'])->name('map.api');
