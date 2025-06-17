@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('local_storages', function (Blueprint $table) {
-            $table->id();
-            $table->string('estado');
-            $table->timestamp('fecha');
-            $table->string('tipo_dato');
+Schema::create('stops', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre');
+    $table->integer('posicion');
+    $table->double('latitud');
+    $table->double('longitud');
+    $table->foreignId('route_id')->constrained()->onDelete('cascade');
+    $table->timestamps();
+});
 
-            $table->timestamps();
-        });
     }
 
     /**
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('local_storages');
+        Schema::dropIfExists('stops');
     }
 };

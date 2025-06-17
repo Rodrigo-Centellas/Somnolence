@@ -50,15 +50,21 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function sessions()
-    {
-        return $this->hasMany(Session::class);
-    }
 
 
 
     public function trips()
     {
         return $this->belongsToMany(Trip::class, 'user_trip');
+    }
+
+        public function gpslocations()
+    {
+        return $this->hasMany(Gpslocation::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 }

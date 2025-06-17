@@ -9,15 +9,14 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['descripcion', 'tipo', 'trip_id'];
+    protected $fillable = [
+        'mensaje', 'tipo', 'nivel', 'fecha', 'hora',
+        'latitud', 'longitud', 'user_id', 'vehicle_id', 'trip_id'
+    ];
+
 
     public function trip()
     {
         return $this->belongsTo(Trip::class);
-    }
-
-    public function alerts()
-    {
-        return $this->belongsToMany(Alert::class, 'alert_event');
     }
 }

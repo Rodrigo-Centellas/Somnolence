@@ -13,7 +13,6 @@ return new class extends Migration
     {
      Schema::create('trips', function (Blueprint $table) {
     $table->id();
-    $table->integer('distancia_recorrida')->nullable();
     $table->string('estado');
     $table->date('fecha_inicio');
     $table->date('fecha_fin')->nullable();

@@ -9,10 +9,18 @@ class Route extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre', 'origen', 'destino', 'distancia'];
+    protected $fillable = [
+        'nombre', 'latitud_origen', 'longitud_origen',
+        'latitud_destino', 'longitud_destino'
+    ];
 
-    public function vehicles()
+    public function stops()
     {
-        return $this->belongsToMany(Vehicle::class, 'vehicle_route');
+        return $this->hasMany(Stop::class);
+    }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
     }
 }
