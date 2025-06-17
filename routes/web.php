@@ -47,12 +47,12 @@ Route::delete('/trips/{trip}',       [TripController::class,'destroy']) ->name('
 
 
 
-Route::get('/rutas_index',                [RutaController::class, 'index'])->name('rutas.index');
-Route::get('/rutas/create',         [RutaController::class, 'create'])->name('rutas.create');
-Route::post('/rutas',               [RutaController::class, 'store'])->name('rutas.store');
-Route::get('/rutas/{ruta}/edit',    [RutaController::class, 'edit'])->name('rutas.edit');
-Route::put('/rutas/{ruta}',         [RutaController::class, 'update'])->name('rutas.update');
-Route::delete('/rutas/{ruta}',      [RutaController::class, 'destroy'])->name('rutas.destroy');
+Route::get('/rutas',               [RutaController::class, 'index'])->name('rutas.index');
+Route::get('/rutas/create',       [RutaController::class, 'create'])->name('rutas.create');
+Route::post('/rutas',             [RutaController::class, 'store'])->name('rutas.store');
+Route::get('/rutas/{ruta}/edit',  [RutaController::class, 'edit'])->name('rutas.edit');
+Route::put('/rutas/{ruta}',       [RutaController::class, 'update'])->name('rutas.update');
+Route::delete('/rutas/{ruta}',    [RutaController::class, 'destroy'])->name('rutas.destroy');
 
 
 

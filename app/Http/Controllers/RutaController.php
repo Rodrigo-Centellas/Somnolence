@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Route;
-use App\Models\Ruta;
 use Illuminate\Http\Request;
 
 class RutaController extends Controller
@@ -22,18 +21,17 @@ class RutaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre' => ['required','string','max:100'],
-            'origen'    => ['required','string','max:255'],
-            'destino'   => ['required','string','max:255'],
-            'distancia' => ['required','numeric'],
-            'estado'    => ['required','boolean'],
+            'nombre'            => ['required', 'string', 'max:100'],
+            'latitud_origen'    => ['required', 'numeric'],
+            'longitud_origen'   => ['required', 'numeric'],
+            'latitud_destino'   => ['required', 'numeric'],
+            'longitud_destino'  => ['required', 'numeric'],
         ]);
 
         Route::create($data);
 
-        return redirect()
-            ->route('rutas.index')
-            ->with('success', 'Ruta creada correctamente.');
+        return redirect()->route('rutas.index')
+                         ->with('success', 'Ruta creada correctamente.');
     }
 
     public function edit(Route $ruta)
@@ -44,25 +42,24 @@ class RutaController extends Controller
     public function update(Request $request, Route $ruta)
     {
         $data = $request->validate([
-            'origen'    => ['required','string','max:255'],
-            'destino'   => ['required','string','max:255'],
-            'distancia' => ['required','numeric'],
-            'estado'    => ['required','boolean'],
+            'nombre'            => ['required', 'string', 'max:100'],
+            'latitud_origen'    => ['required', 'numeric'],
+            'longitud_origen'   => ['required', 'numeric'],
+            'latitud_destino'   => ['required', 'numeric'],
+            'longitud_destino'  => ['required', 'numeric'],
         ]);
 
         $ruta->update($data);
 
-        return redirect()
-            ->route('rutas.index')
-            ->with('success', 'Ruta actualizada correctamente.');
+        return redirect()->route('rutas.index')
+                         ->with('success', 'Ruta actualizada correctamente.');
     }
 
     public function destroy(Route $ruta)
     {
         $ruta->delete();
 
-        return redirect()
-            ->route('rutas.index')
-            ->with('success', 'Ruta eliminada correctamente.');
+        return redirect()->route('rutas.index')
+                         ->with('success', 'Ruta eliminada correctamente.');
     }
 }

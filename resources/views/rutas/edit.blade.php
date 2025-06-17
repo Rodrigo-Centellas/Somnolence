@@ -3,46 +3,44 @@
 @section('content')
 <div class="col-lg-6 col-12 mt-4 mt-lg-0">
   <div class="card mb-4">
-    <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-      <h6 class="mb-0">Edit Route</h6>
+    <div class="card-header d-flex justify-content-between align-items-center pb-0">
+      <h6 class="mb-0">Editar Ruta</h6>
       <a href="{{ route('rutas.index') }}" class="btn btn-sm btn-secondary">
-        <i class="fa fa-arrow-left me-1"></i> Back
+        <i class="fa fa-arrow-left me-1"></i> Volver
       </a>
     </div>
     <div class="card-body px-4 pt-4 pb-2">
       <form action="{{ route('rutas.update', $ruta) }}" method="POST">
-        @csrf
-        @method('PUT')
+        @csrf @method('PUT')
 
-        <div class="input-group input-group-outline mb-3">
-          <label class="form-label">Origin</label>
-          <input type="text" name="origen" class="form-control"
-                 value="{{ old('origen', $ruta->origen) }}">
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input type="text" name="nombre" class="form-control" value="{{ old('nombre', $ruta->nombre) }}" required>
         </div>
 
-        <div class="input-group input-group-outline mb-3">
-          <label class="form-label">Destination</label>
-          <input type="text" name="destino" class="form-control"
-                 value="{{ old('destino', $ruta->destino) }}">
+        <div class="mb-3">
+          <label class="form-label">Latitud Origen</label>
+          <input type="number" step="any" name="latitud_origen" class="form-control" value="{{ old('latitud_origen', $ruta->latitud_origen) }}" required>
         </div>
 
-        <div class="input-group input-group-outline mb-3">
-          <label class="form-label">Distance</label>
-          <input type="number" name="distancia" class="form-control"
-                 value="{{ old('distancia', $ruta->distancia) }}">
+        <div class="mb-3">
+          <label class="form-label">Longitud Origen</label>
+          <input type="number" step="any" name="longitud_origen" class="form-control" value="{{ old('longitud_origen', $ruta->longitud_origen) }}" required>
         </div>
 
-        <div class="input-group input-group-outline mb-3">
-          <label class="form-label">Status</label>
-          <select name="estado" class="form-control">
-            <option value="1" {{ $ruta->estado ? 'selected':'' }}>Active</option>
-            <option value="0" {{ !$ruta->estado ? 'selected':'' }}>Inactive</option>
-          </select>
+        <div class="mb-3">
+          <label class="form-label">Latitud Destino</label>
+          <input type="number" step="any" name="latitud_destino" class="form-control" value="{{ old('latitud_destino', $ruta->latitud_destino) }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Longitud Destino</label>
+          <input type="number" step="any" name="longitud_destino" class="form-control" value="{{ old('longitud_destino', $ruta->longitud_destino) }}" required>
         </div>
 
         <div class="text-end">
           <button type="submit" class="btn btn-primary">
-            <i class="fa fa-save me-1"></i> Update
+            <i class="fa fa-save me-1"></i> Actualizar
           </button>
         </div>
       </form>
@@ -50,9 +48,3 @@
   </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-  // … tus scripts aquí …
-</script>
-@endpush
