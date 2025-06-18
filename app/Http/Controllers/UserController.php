@@ -5,95 +5,100 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-    public function showSignUp()
-    {
-        return view('sign_up');
-    }
+    /* ------------------------------------------------------------------
+     |  LISTAR
+     *------------------------------------------------------------------*/
     public function index()
     {
         $users = User::all();
         return view('Usuario.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    /* ------------------------------------------------------------------
+     |  FORMULARIO CREATE
+     *------------------------------------------------------------------*/
     public function create()
-    {   
+    {
         $roles = Role::all();
         return view('Usuario.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-public function store(Request $request)
-{
-    // 1. Validar los datos de entrada
-    $data = $request->validate([
-        'nombre'             => ['required', 'string', 'max:255'],
-        'apellido'           => ['required', 'string', 'max:255'],
-        'email'              => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password'           => ['required', 'string', 'min:3'],
-        'ci'                 => ['nullable', 'string', 'max:100'],
-        'datos_biometricos'  => ['nullable', 'string'],
-        'estado'             => ['required', 'boolean'],
-        'role_id'            => ['required', 'exists:roles,id'],
-    ]);
-
-    // 2. Hashear la contraseña
-    $data['password'] = Hash::make($data['password']);
-
-    // 3. Crear el usuario
-    $user = User::create($data);
-
-    // 4. Redirigir de vuelta con un mensaje de éxito
-    return redirect()
-        ->route('user_index')
-        ->with('success', "Usuario “{$user->nombre} {$user->apellido}” creado correctamente.");
-}
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    /* ------------------------------------------------------------------
+     |  GUARDAR NUEVO USUARIO
+     *------------------------------------------------------------------*/
+    public function store(Request $request)
     {
-        //
+        /* 1. Validación */
+        $data = $request->validate([
+            'nombre'    => ['required', 'string', 'max:255'],
+            'apellido'  => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'  => ['required', 'string', 'min:3'],
+            'photo'     => ['required', 'image', 'mimes:jpeg,png', 'max:2048'],
+            'ci'        => ['nullable', 'string', 'max:100'],
+            'datos_biometricos' => ['nullable', 'string'],
+            'estado'    => ['required', 'boolean'],
+            'role_id'   => ['required', 'exists:roles,id'],
+        ]);
+
+        /* 2. Subir foto */
+        $path = $request->file('photo')
+                        ->store('users', 'public');   // storage/app/public/users
+        $data['profile_photo_path'] = $path;
+
+        /* 3. Hashear contraseña */
+        $data['password'] = Hash::make($data['password']);
+
+        /* 4. Crear usuario */
+        $user = User::create($data);
+
+        return redirect()
+            ->route('user_index')
+            ->with('success', "Usuario «{$user->nombre} {$user->apellido}» creado correctamente.");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-  public function edit(User $user)
+    /* ------------------------------------------------------------------
+     |  FORMULARIO EDIT
+     *------------------------------------------------------------------*/
+    public function edit(User $user)
     {
         $roles = Role::all();
-        return view('Usuario.edit', compact('user','roles'));
+        return view('Usuario.edit', compact('user', 'roles'));
     }
 
-    // Procesar actualización
+    /* ------------------------------------------------------------------
+     |  ACTUALIZAR
+     *------------------------------------------------------------------*/
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'nombre'             => ['required', 'string','max:255'],
-            'apellido'           => ['required', 'string','max:255'],
-            'email'              => ['required','string','email','max:255',"unique:users,email,{$user->id}"],
-            'password'           => ['nullable','string','min:3'],
-            'ci'                 => ['nullable','string','max:100'],
-            'datos_biometricos'  => ['nullable','string'],
-            'estado'             => ['required','boolean'],
-            'role_id'            => ['required','exists:roles,id'],
+            'nombre'    => ['required', 'string', 'max:255'],
+            'apellido'  => ['required', 'string', 'max:255'],
+            'email'     => ['required', 'string', 'email', 'max:255', "unique:users,email,{$user->id}"],
+            'password'  => ['nullable', 'string', 'min:3'],
+            'photo'     => ['nullable', 'image', 'mimes:jpeg,png', 'max:2048'],
+            'ci'        => ['nullable', 'string', 'max:100'],
+            'datos_biometricos' => ['nullable', 'string'],
+            'estado'    => ['required', 'boolean'],
+            'role_id'   => ['required', 'exists:roles,id'],
         ]);
 
-        // Sólo re-hashear si se proporciona nueva password
+        /* Foto nueva */
+        if ($request->hasFile('photo')) {
+            // borrar la anterior si existe
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $data['profile_photo_path'] = $request->file('photo')
+                                                 ->store('users', 'public');
+        }
+
+        /* Password opcional */
         if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -107,14 +112,20 @@ public function store(Request $request)
             ->with('success', "Usuario «{$user->nombre} {$user->apellido}» actualizado.");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    /* ------------------------------------------------------------------
+     |  ELIMINAR
+     *------------------------------------------------------------------*/
     public function destroy(User $user)
     {
-        $user->delete(); // o ->forceDelete() si quieres borrado definitivo
+        // borrar foto asociada
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+        }
+
+        $user->delete();
+
         return redirect()
             ->route('user_index')
-            ->with('success', "Usuario “{$user->nombre} {$user->apellido}” eliminado.");
+            ->with('success', "Usuario «{$user->nombre} {$user->apellido}» eliminado.");
     }
 }

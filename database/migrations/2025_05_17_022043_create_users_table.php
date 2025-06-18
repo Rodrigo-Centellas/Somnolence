@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
-             $table->string('email');
-              $table->string('password');
+            $table->string('email');
+            $table->string('password');
+            $table->string('profile_photo_path')->nullable();
             $table->string('ci')->unique();
             $table->binary('datos_biometricos')->nullable();
             $table->string('estado');

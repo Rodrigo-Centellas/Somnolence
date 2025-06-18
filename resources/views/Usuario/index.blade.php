@@ -67,16 +67,20 @@
                   Edit
                 </a>
                                  <!-- Delete -->
-                    <form action="{{ route('users.destroy', $user) }}"
-                          method="POST"
-                          class="d-inline"
-                          onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit"
-                              class="btn btn-link text-danger p-0 m-0 text-xs align-baseline ps-2 pt-2 pb-2 px-2">
-                        <i class="fa fa-trash"></i>
-                      </button>
+               <a href="#"
+                  class="text-danger font-weight-bold text-xs"
+                  onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
+                 Delete
+               </a>
+               <form id="delete-form-{{ $user->id }}" action="{{ route('users.destroy', $user) }}"
+                     method="POST" class="d-inline"
+                     onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                 @csrf
+                 @method('DELETE')
+                 <button type="submit"
+                         class="btn btn-link text-danger p-0 m-0 text-xs align-baseline ps-2 pt-2 pb-2 px-2">
+                   <i class="fa fa-trash"></i>
+                 </button>
                     </form>
               </td>
             </tr>
