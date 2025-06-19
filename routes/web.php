@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\RutaController;
+use App\Http\Controllers\StopController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Models\Stop;
 
 Route::get('/', [AuthController::class, 'ShowLogin'])->name('login'); // welcome.blade.php
 Route::post('/dashboard', [AuthController::class, 'login'])->name('login.attempt');
@@ -54,7 +56,7 @@ Route::get('/rutas/{ruta}/edit',  [RutaController::class, 'edit'])->name('rutas.
 Route::put('/rutas/{ruta}',       [RutaController::class, 'update'])->name('rutas.update');
 Route::delete('/rutas/{ruta}',    [RutaController::class, 'destroy'])->name('rutas.destroy');
 
-
+Route::resource('stops', StopController::class);
 
 Route::get('/mapa', [MapController::class, 'index'])->name('map.index');
 Route::get('/api/gps-tracker', [MapController::class, 'apiGpsData'])->name('map.api');

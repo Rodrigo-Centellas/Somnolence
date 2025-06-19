@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Route;
+use App\Models\Stop;
 use Illuminate\Http\Request;
 
 class RutaController extends Controller
@@ -15,51 +16,71 @@ class RutaController extends Controller
 
     public function create()
     {
-        return view('rutas.create');
+        $allStops = Stop::all();
+        return view('rutas.create', compact('allStops'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'            => ['required', 'string', 'max:100'],
-            'latitud_origen'    => ['required', 'numeric'],
-            'longitud_origen'   => ['required', 'numeric'],
-            'latitud_destino'   => ['required', 'numeric'],
-            'longitud_destino'  => ['required', 'numeric'],
+            'nombre'            => ['required','string','max:100'],
+            'latitud_origen'    => ['required','numeric'],
+            'longitud_origen'   => ['required','numeric'],
+            'latitud_destino'   => ['required','numeric'],
+            'longitud_destino'  => ['required','numeric'],
         ]);
 
-        Route::create($data);
+        $route = Route::create($data);
 
-        return redirect()->route('rutas.index')
-                         ->with('success', 'Ruta creada correctamente.');
+        // sincronizar paradas con orden
+        $syncData = collect($request->input('stops_order', []))
+            ->filter(fn($orden) => $orden)
+            ->mapWithKeys(fn($orden, $stopId) => [(int)$stopId => ['orden' => (int)$orden]])
+            ->toArray();
+        $route->stops()->sync($syncData);
+
+        return redirect()
+            ->route('rutas.index')
+            ->with('success','Ruta creada correctamente.');
     }
 
     public function edit(Route $ruta)
     {
-        return view('rutas.edit', compact('ruta'));
+        $allStops = Stop::all();
+        return view('rutas.edit', compact('ruta','allStops'));
     }
 
     public function update(Request $request, Route $ruta)
     {
         $data = $request->validate([
-            'nombre'            => ['required', 'string', 'max:100'],
-            'latitud_origen'    => ['required', 'numeric'],
-            'longitud_origen'   => ['required', 'numeric'],
-            'latitud_destino'   => ['required', 'numeric'],
-            'longitud_destino'  => ['required', 'numeric'],
+            'nombre'            => ['required','string','max:100'],
+            'latitud_origen'    => ['required','numeric'],
+            'longitud_origen'   => ['required','numeric'],
+            'latitud_destino'   => ['required','numeric'],
+            'longitud_destino'  => ['required','numeric'],
         ]);
 
         $ruta->update($data);
 
-        return redirect()->route('rutas.index')
-                         ->with('success', 'Ruta actualizada correctamente.');
+        // sincronizar paradas con orden
+        $syncData = collect($request->input('stops_order', []))
+            ->filter(fn($orden) => $orden)
+            ->mapWithKeys(fn($orden, $stopId) => [(int)$stopId => ['orden' => (int)$orden]])
+            ->toArray();
+        $ruta->stops()->sync($syncData);
+
+        return redirect()
+            ->route('rutas.index')
+            ->with('success','Ruta actualizada correctamente.');
     }
 
     public function destroy(Route $ruta)
     {
+        $ruta->stops()->detach();
         $ruta->delete();
 
-        return redirect()->route('rutas.index')
-                         ->with('success', 'Ruta eliminada correctamente.');
+        return redirect()
+            ->route('rutas.index')
+            ->with('success','Ruta eliminada.');
     }
 }

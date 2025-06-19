@@ -14,10 +14,8 @@ return new class extends Migration
 Schema::create('stops', function (Blueprint $table) {
     $table->id();
     $table->string('nombre');
-    $table->integer('posicion');
     $table->double('latitud');
     $table->double('longitud');
-    $table->foreignId('route_id')->constrained()->onDelete('cascade');
     $table->timestamps();
 });
 
