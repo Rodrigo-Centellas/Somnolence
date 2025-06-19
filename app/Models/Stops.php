@@ -11,8 +11,10 @@ class Stop extends Model
 
     protected $fillable = ['nombre', 'posicion', 'latitud', 'longitud', 'route_id'];
 
-    public function route()
+    public function routes()
     {
-        return $this->belongsTo(Route::class);
+        return $this->belongsToMany(Route::class, 'route_stop')
+                    ->withPivot('orden')
+                    ->withTimestamps();
     }
 }

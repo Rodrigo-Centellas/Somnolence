@@ -16,9 +16,11 @@ class Route extends Model
 
     public function stops()
     {
-        return $this->hasMany(Stop::class);
+        return $this->belongsToMany(Stop::class, 'route_stop')
+                    ->withPivot('orden')
+                    ->withTimestamps()
+                    ->orderBy('pivot_orden');
     }
-
     public function trips()
     {
         return $this->hasMany(Trip::class);
