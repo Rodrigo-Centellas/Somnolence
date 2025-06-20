@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('routes', function (Blueprint $table) {
-    $table->id();
-    $table->string('nombre');
-    $table->double('latitud_origen');
-    $table->double('longitud_origen');
-    $table->double('latitud_destino');
-    $table->double('longitud_destino');
-    $table->timestamps();
-});
-
+        Schema::create('routes', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre');
+            $table->double('latitud_origen');
+            $table->double('longitud_origen');
+            $table->double('latitud_destino');
+            $table->double('longitud_destino');
+            $table->timestamps();
+        });
     }
 
     /**

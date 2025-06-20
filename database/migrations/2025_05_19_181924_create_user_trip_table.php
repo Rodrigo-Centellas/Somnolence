@@ -13,13 +13,13 @@ class CreateUserTripTable extends Migration
 
             // FK al usuario
             $table->foreignId('user_id')
-                  ->constrained()
-                  ->onDelete('cascade');
+                ->constrained()
+                ->onDelete('cascade');
 
             // FK al viaje
             $table->foreignId('trip_id')
-                  ->constrained()
-                  ->onDelete('cascade');
+                ->constrained()
+                ->onDelete('cascade');
 
             $table->timestamps();
         });

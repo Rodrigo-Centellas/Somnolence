@@ -18,15 +18,38 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
         ]);
+        User::create(
+            [
+                'nombre' => 'Rodrigo',
+                'apellido' => 'Centellas',
+                'ci' => '7772243',
+                'email' => 'rodrigo@gmail.com',
+                'estado' => 'disponible',
+                'role_id' => '1',
+                'password' => Hash::make('123')
+            ]
+        );
+
         User::create([
-            'nombre' => 'Rodrigo',
-            'apellido' => 'Centellas',
-            'ci' => '7772243',
-            'email' => 'rodrigo@gmail.com',
+            'nombre' => 'Jorge',
+            'apellido' => 'Rossel',
+            'ci' => '7695673',
+            'email' => 'jorge@gmail.com',
+            'profile_photo_path' => '/storage/jorge.jpg',
             'estado' => 'disponible',
-            'role_id' => '1',
+            'role_id' => 3,
             'password' => Hash::make('123')
         ]);
 
+        User::create([
+            'nombre' => 'Luis',
+            'apellido' => 'Rossel',
+            'ci' => '7123456',
+            'email' => 'luis@gmail.com',
+            'profile_photo_path' => '/storage/luis.jpg',
+            'estado' => 'disponible',
+            'role_id' => 3,
+            'password' => Hash::make('123')
+        ]);
     }
 }

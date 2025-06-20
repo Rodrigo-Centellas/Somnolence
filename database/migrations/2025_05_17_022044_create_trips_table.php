@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-     Schema::create('trips', function (Blueprint $table) {
-    $table->id();
-    $table->string('estado');
-    $table->date('fecha_inicio');
-    $table->date('fecha_fin')->nullable();
-    $table->foreignId('vehicle_id')->constrained('vehicles');
-    $table->foreignId('route_id')->constrained('routes');
-    $table->timestamps();
-});
+        Schema::create('trips', function (Blueprint $table) {
+            $table->id();
+            $table->string('estado');
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin')->nullable();
+            $table->foreignId('vehicle_id')->constrained('vehicles');
+            $table->foreignId('route_id')->constrained('routes');
+            $table->timestamps();
+        });
     }
 
     /**

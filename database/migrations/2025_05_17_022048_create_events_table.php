@@ -11,21 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('events', function (Blueprint $table) {
-    $table->id();
-    $table->string('mensaje');
-    $table->string('tipo');
-    $table->string('nivel');
-    $table->date('fecha');
-    $table->time('hora');
-    $table->double('latitud');
-    $table->double('longitud');
-    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
-    $table->foreignId('trip_id')->constrained()->onDelete('cascade');
-    $table->timestamps();
-});
-
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->string('mensaje');
+            $table->string('tipo');
+            $table->string('nivel');
+            $table->date('fecha');
+            $table->time('hora');
+            $table->double('latitud');
+            $table->double('longitud');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
+            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**

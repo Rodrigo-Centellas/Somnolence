@@ -10,14 +10,14 @@ return new class extends Migration {
         Schema::create('route_stop', function (Blueprint $table) {
             $table->id();
             $table->foreignId('route_id')
-                  ->constrained('routes')
-                  ->onDelete('cascade');
+                ->constrained('routes')
+                ->onDelete('cascade');
             $table->foreignId('stop_id')
-                  ->constrained('stops')
-                  ->onDelete('cascade');
+                ->constrained('stops')
+                ->onDelete('cascade');
             $table->unsignedInteger('orden')->nullable();
             $table->timestamps();
-            });
+        });
     }
 
     public function down(): void

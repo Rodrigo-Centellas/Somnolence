@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('gpslocations', function (Blueprint $table) {
-    $table->id();
-    $table->double('latitud');
-    $table->double('longitud');
-    $table->double('velocidad');
-    $table->date('fecha');
-    $table->time('hora');
-    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
-    $table->foreignId('trip_id')->constrained()->onDelete('cascade');
-    $table->timestamps();
-});
-
+        Schema::create('gpslocations', function (Blueprint $table) {
+            $table->id();
+            $table->double('latitud');
+            $table->double('longitud');
+            $table->double('velocidad');
+            $table->date('fecha');
+            $table->time('hora');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
+            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
