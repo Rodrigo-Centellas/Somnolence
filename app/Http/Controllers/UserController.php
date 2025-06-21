@@ -48,7 +48,7 @@ class UserController extends Controller
 
         /* 2. Subir foto */
         $path = $request->file('photo')
-                        ->store('users', 'public');   // storage/app/public/users
+                        ->store('storage','public');   // storage/app/public/users
         $data['profile_photo_path'] = $path;
 
         /* 3. Hashear contraseña */
@@ -95,7 +95,7 @@ class UserController extends Controller
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
             $data['profile_photo_path'] = $request->file('photo')
-                                                 ->store('users', 'public');
+                                                 ->store('storage', 'public');
         }
 
         /* Password opcional */
