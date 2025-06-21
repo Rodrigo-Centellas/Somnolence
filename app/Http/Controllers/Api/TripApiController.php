@@ -26,7 +26,7 @@ class TripApiController extends Controller
             'trip' => [
                 'id' => $trip->id,
                 'fecha_inicio' => $trip->fecha_inicio,
-                'hora_inicio' => $trip->hora_inicio,
+                'hora_inicio' => $trip->hora_inicio->format('H:i'),
                 'vehicle_id' => $trip->vehicle_id,
                 'route' => [
                     'id' => $trip->route->id,
