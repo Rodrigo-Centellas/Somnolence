@@ -19,6 +19,7 @@
               <th>Vehículo</th>
               <th class="text-center">Estado</th>
               <th class="text-center">Inicio</th>
+              <th class="text-center">Hora</th>
               <th class="text-center">Fin</th>
               <th class="text-end">Acciones</th>
             </tr>
@@ -35,6 +36,7 @@
                 </span>
               </td>
               <td class="text-center">{{ \Carbon\Carbon::parse($trip->fecha_inicio)->format('d/m/Y H:i') }}</td>
+              <td class="text-center">{{ \Carbon\Carbon::parse($trip->hora_inicio)->format('H:i') }}</td>
               <td class="text-center">
                 {{ $trip->fecha_fin ? \Carbon\Carbon::parse($trip->fecha_fin)->format('d/m/Y H:i') : '—' }}
               </td>

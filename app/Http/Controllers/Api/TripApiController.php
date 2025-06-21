@@ -25,9 +25,12 @@ class TripApiController extends Controller
             'success' => true,
             'trip' => [
                 'id' => $trip->id,
+                'fecha_inicio' => $trip->fecha_inicio,
+                'hora_inicio' => $trip->hora_inicio,
                 'vehicle_id' => $trip->vehicle_id,
                 'route' => [
                     'id' => $trip->route->id,
+                    'nombre' => $trip->route->nombre,
                     'origen_lat' => $trip->route->latitud_origen,
                     'origen_lng' => $trip->route->longitud_origen,
                     'destino_lat' => $trip->route->latitud_destino,
