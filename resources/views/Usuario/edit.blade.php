@@ -1,4 +1,4 @@
-@extends('layouts.app')
+c@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid py-4">
@@ -86,7 +86,7 @@
               </select>
             </div>
 
-            {{-- FOTO: previsualización + cámara --}}
+            {{-- FOTO: previsualización + cámara + subir --}}
             <div class="mb-4">
               <label class="form-label">Foto de Perfil</label><br>
               <img id="preview" 
@@ -96,15 +96,13 @@
                    class="rounded mb-2"
                    style="width:150px;height:150px;object-fit:cover">
               <div class="mb-2">
-                <button type="button"
-                        id="btnStartCamera"
-                        class="btn btn-sm btn-outline-primary">
+                <button type="button" id="btnStartCamera" class="btn btn-sm btn-outline-primary me-2">
                   <i class="fa fa-camera me-1"></i> Tomar / Retomar
                 </button>
-                <button type="button"
-                        id="btnCapture"
-                        class="btn btn-sm btn-success"
-                        style="display:none;">
+                <button type="button" id="btnUpload" class="btn btn-sm btn-outline-secondary me-2">
+                  <i class="fa fa-upload me-1"></i> Cargar Imagen
+                </button>
+                <button type="button" id="btnCapture" class="btn btn-sm btn-success" style="display:none;">
                   <i class="fa fa-check me-1"></i> Capturar
                 </button>
               </div>
@@ -141,40 +139,60 @@
   const preview    = document.getElementById('preview');
   const fileInput  = document.getElementById('photo');
   const btnStart   = document.getElementById('btnStartCamera');
+  const btnUpload  = document.getElementById('btnUpload');
   const btnCapture = document.getElementById('btnCapture');
   let stream;
 
-  // Arrancar cámara
+  // 1. Abrir cámara
   btnStart.addEventListener('click', async () => {
     try {
       stream = await navigator.mediaDevices.getUserMedia({ video:true });
       video.srcObject = stream;
-      video.style.display    = 'block';
+      video.style.display     = 'block';
       btnCapture.style.display = 'inline-block';
     } catch (e) {
       alert('Permiso denegado o HTTPS requerido.');
     }
   });
 
-  // Capturar foto
+  // 2. Subir imagen desde dispositivo
+  btnUpload.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // 3. Previsualizar archivo elegido
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+      video.style.display     = 'none';
+      btnCapture.style.display = 'none';
+    }
+    preview.src = URL.createObjectURL(file);
+  });
+
+  // 4. Capturar foto desde video
   btnCapture.addEventListener('click', () => {
     const canvas = document.createElement('canvas');
     canvas.width  = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
     stream.getTracks().forEach(t=>t.stop());
-    video.style.display    = 'none';
+    video.style.display     = 'none';
     btnCapture.style.display = 'none';
 
     const dataUrl = canvas.toDataURL('image/jpeg');
     preview.src = dataUrl;
 
-    fetch(dataUrl).then(r=>r.blob()).then(blob=>{
-      const file = new File([blob], 'photo.jpg', { type:'image/jpeg' });
-      const dt   = new DataTransfer();
-      dt.items.add(file);
-      fileInput.files = dt.files;
-    });
+    fetch(dataUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        const file = new File([blob], 'photo.jpg', { type:'image/jpeg' });
+        const dt   = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+      });
   });
 </script>
 @endpush

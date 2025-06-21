@@ -80,15 +80,27 @@
                    class="rounded mb-2"
                    style="width:150px;height:150px;object-fit:cover">
               <div class="mb-2">
-                <button type="button" id="btnStartCamera" class="btn btn-sm btn-outline-primary">
+                <button type="button" id="btnStartCamera" class="btn btn-sm btn-outline-primary me-2">
                   <i class="fa fa-camera me-1"></i> Tomar / Retomar
+                </button>
+                <button type="button" id="btnUpload" class="btn btn-sm btn-outline-secondary me-2">
+                  <i class="fa fa-upload me-1"></i> Cargar Imagen
                 </button>
                 <button type="button" id="btnCapture" class="btn btn-sm btn-success" style="display:none;">
                   <i class="fa fa-check me-1"></i> Capturar
                 </button>
               </div>
-              <video id="video" autoplay playsinline style="display:none; width:150px;height:150px;object-fit:cover; border:1px solid #ccc;"></video>
-              <input type="file" name="photo" id="photo" accept="image/*" capture="environment" class="d-none" required>
+              <video id="video"
+                     autoplay playsinline
+                     style="display:none; width:150px;height:150px;object-fit:cover;border:1px solid #ccc;">
+              </video>
+              <input type="file"
+                     name="photo"
+                     id="photo"
+                     accept="image/*"
+                     capture="environment"
+                     class="d-none"
+                     required>
               <small class="text-muted">Máx. 2 MB · JPG/PNG.</small>
             </div>
 
@@ -112,39 +124,54 @@
   const preview    = document.getElementById('preview');
   const fileInput  = document.getElementById('photo');
   const btnStart   = document.getElementById('btnStartCamera');
+  const btnUpload  = document.getElementById('btnUpload');
   const btnCapture = document.getElementById('btnCapture');
   let stream;
 
-  // 1. Al pulsar “Tomar / Retomar”: pedir permiso y mostrar video
+  // 1. Abrir cámara
   btnStart.addEventListener('click', async () => {
     try {
       stream = await navigator.mediaDevices.getUserMedia({ video: true });
       video.srcObject = stream;
-      video.style.display    = 'block';
+      video.style.display     = 'block';
       btnCapture.style.display = 'inline-block';
     } catch (e) {
       alert('No se pudo acceder a la cámara. Asegúrate de usar HTTPS y dar permisos.');
     }
   });
 
-  // 2. Al pulsar “Capturar”: dibuja el fotograma en canvas y conviértelo en archivo
+  // 2. Disparar selector de archivos
+  btnUpload.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // 3. Procesar archivo seleccionado
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+      video.style.display     = 'none';
+      btnCapture.style.display = 'none';
+    }
+    const url = URL.createObjectURL(file);
+    preview.src = url;
+  });
+
+  // 4. Capturar foto de video
   btnCapture.addEventListener('click', () => {
-    // crear un canvas del tamaño del video
     const canvas = document.createElement('canvas');
     canvas.width  = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
 
-    // detener cámara
     stream.getTracks().forEach(t => t.stop());
-    video.style.display    = 'none';
+    video.style.display     = 'none';
     btnCapture.style.display = 'none';
 
-    // mostrar preview
     const dataUrl = canvas.toDataURL('image/jpeg');
     preview.src = dataUrl;
 
-    // convertir dataURL a Blob y asignar al input
     fetch(dataUrl)
       .then(res => res.blob())
       .then(blob => {
