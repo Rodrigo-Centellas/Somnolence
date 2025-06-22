@@ -19,8 +19,8 @@ class EventApiController extends Controller
             'latitud' => 'required|numeric',
             'longitud' => 'required|numeric',
             'user_id' => 'required|integer',
-            'vehicle_id' => 'required|integer',
-            'trip_id' => 'required|integer',
+            'vehicle_id' => 'nullable|integer',
+            'trip_id' => 'nullable|integer',
         ]);
 
         $evento = Event::create($validated);

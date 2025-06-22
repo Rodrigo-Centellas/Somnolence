@@ -21,8 +21,8 @@ return new class extends Migration
             $table->double('latitud');
             $table->double('longitud');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
-            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
+            $table->foreignId('vehicle_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('trip_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
