@@ -69,3 +69,8 @@ Route::get('/reportes/viajes/excel', [ReporteController::class, 'exportExcel'])-
 Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.viajes.index');
 Route::get('/reportes/viajes/excel', [ReporteController::class, 'exportExcel'])->name('reportes.viajes.excel');
 Route::get('/reportes/viajes/pdf', [ReporteController::class, 'exportPdf'])->name('reportes.viajes.pdf');
+
+
+use App\Http\Controllers\ReporteEventoController;
+
+Route::get('/eventos', [App\Http\Controllers\EventController::class, 'index'])->name('eventos.index');

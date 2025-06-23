@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card bg-dark text-white">
+      <div class="card bg-info text-white">
         <div class="card-body d-flex justify-content-between align-items-center">
           <div>
             <h5 class="mb-0">{{ $totalVehiculos }}</h5>
