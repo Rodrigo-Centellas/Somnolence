@@ -111,7 +111,9 @@
     }
     document.querySelectorAll('.view-in-map').forEach(attachViewInMapHandler);
 
-    const socket     = io("http://localhost:6001");
+    const socket = io(`${location.protocol}//${location.hostname}:6001`, {
+  transports: ["websocket"],
+});
     const eventSound = document.getElementById('event-sound');
 
     // Llegada de nuevos eventos
