@@ -27,7 +27,7 @@ class AuthController extends Controller
  
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
- 
+            Auth::user()->load('role');
             return redirect()->intended('dashboard');
         }
  
@@ -36,8 +36,8 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function dashboard(){
-        return view('dashboard');
+    public function inicio(){
+        return view('inicio');
     }
 
    public function logout(Request $request)

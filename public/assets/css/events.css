@@ -1,0 +1,25 @@
+/* resources/css/events.css */
+
+/* ==== Niveles (bordes y fondos pastel) ==== */
+.lvl-Informacion {
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 136, 255, 0.1);  /* gris pastel */
+  border-color: rgb(0, 0, 0);
+}
+.lvl-Advertencia {
+  --tw-bg-opacity: 1;
+  background-color: rgba(255,193,7,0.1);    /* amarillo pastel */
+  border-color: rgba(255,193,7,1);
+}
+.lvl-Critico {
+  --tw-bg-opacity: 1;
+  background-color: rgba(220,53,69,0.1);    /* rojo pastel */
+  border-color: rgba(220,53,69,1);
+}
+
+/* ==== Tipos (badges pastel) ==== */
+.type-Tenemos    { background-color: rgba(13,110,253,0.2); color: #0d6efd; }
+.type-Velocidad  { background-color: rgba(255,193,7,0.2);   color: #ffc107; }
+.type-Ruta       { background-color: rgba(0,123,255,0.2);   color: #007bff; }
+.type-Seguridad  { background-color: rgba(25,135,84,0.2);   color: #198754; }
+.type-Emergencia { background-color: rgba(220,53,69,0.2);   color: #dc3545; }

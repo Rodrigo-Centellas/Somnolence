@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\GpsUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Gpslocation;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class GpsLocationApiController extends Controller
         $gpsLocation->fecha = $validated['fecha'];
         $gpsLocation->hora = $validated['hora'];
         $gpsLocation->save();
-
+        broadcast(new GpsUpdated($gpsLocation))->toOthers();
         return response()->json(['message' => 'Ubicación registrada correctamente.'], 200);
     }
 }

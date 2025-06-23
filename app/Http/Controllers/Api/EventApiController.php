@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\EventCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log as FacadesLog;
+
+use function Illuminate\Log\log;
 
 class EventApiController extends Controller
 {
@@ -24,6 +29,10 @@ class EventApiController extends Controller
         ]);
 
         $evento = Event::create($validated);
+FacadesLog::info("🔔 [EventApiController] a punto de broadcast EventCreated ID='.$evento->id");
+broadcast(new EventCreated($evento))->toOthers();
+FacadesLog::info('🔔 [EventApiController] broadcast disparado');
+
 
         return response()->json([
             'success' => true,

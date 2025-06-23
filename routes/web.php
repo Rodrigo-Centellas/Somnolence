@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\RutaController;
 use App\Http\Controllers\StopController;
 use App\Http\Controllers\TripController;
@@ -11,8 +13,8 @@ use App\Http\Controllers\VehicleController;
 use App\Models\Stop;
 
 Route::get('/', [AuthController::class, 'ShowLogin'])->name('login'); // welcome.blade.php
-Route::post('/dashboard', [AuthController::class, 'login'])->name('login.attempt');
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth')->name('dashboard');
+Route::post('/inicio', [AuthController::class, 'login'])->name('login.attempt');
+Route::get('/inicio', [AuthController::class, 'inicio'])->middleware('auth')->name('dashboard');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 
@@ -37,7 +39,7 @@ Route::put('/vehicle_update/{vehicle}',[VehicleController::class,'update']) ->na
 Route::delete('/vehicle_destroy/{vehicle}',[VehicleController::class,'destroy']) ->name('vehicles.destroy');
 
 
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 Route::get('/trips',                 [TripController::class,'index'])   ->name('trips.index');
@@ -60,3 +62,10 @@ Route::resource('stops', StopController::class);
 
 Route::get('/mapa', [MapController::class, 'index'])->name('map.index');
 Route::get('/api/gps-tracker', [MapController::class, 'apiGpsData'])->name('map.api');
+
+
+Route::get('/reportes/viajes/excel', [ReporteController::class, 'exportExcel'])->name('reportes.viajes.excel');
+
+Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.viajes.index');
+Route::get('/reportes/viajes/excel', [ReporteController::class, 'exportExcel'])->name('reportes.viajes.excel');
+Route::get('/reportes/viajes/pdf', [ReporteController::class, 'exportPdf'])->name('reportes.viajes.pdf');
