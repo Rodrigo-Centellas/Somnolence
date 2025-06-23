@@ -36,6 +36,24 @@ services:
       - "6379:6379"
     networks:
       - laravel
+      
+  websocket:
+    image: node:20-alpine
+    container_name: websocket_server
+    working_dir: /usr/src/app
+    volumes:
+      - ./ws-server:/usr/src/app   # monta código Node
+    command: ["node", "server.js"]
+    environment:
+      - REDIS_HOST=redis           # nombre del servicio Redis interno
+      - REDIS_PORT=6379
+      # Si necesitas password: REDIS_PASSWORD=******
+    ports:
+      - "6001:6001"                # puerto público WebSocket
+    depends_on:
+      - redis
+    networks:
+      - laravel
 
 networks:
   laravel:
