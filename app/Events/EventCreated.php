@@ -47,8 +47,8 @@ class EventCreated implements ShouldBroadcast
             'hora' =>   Carbon::parse($this->event->hora)->format('H:i'),
             'lat'      => $this->event->latitud,
             'lng'      => $this->event->longitud,
-            'vehiculo' => $this->event->trip->vehicle->placa,
-            'ruta'     => $this->event->trip->route->nombre,
+            'vehiculo' => $this->event->trip?->vehicle?->placa ?? 'vehículo no asignado',
+            'ruta'     => $this->event->trip?->route?->nombre ?? 'ruta no asignada',
         ];
     }
 }
