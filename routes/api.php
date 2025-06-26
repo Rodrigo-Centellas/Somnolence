@@ -20,5 +20,5 @@ Route::middleware('api')->get('/gps-tracker', [MapController::class, 'apiGpsData
 Route::get('/user-by-ci/{ci}', [UserApiController::class, 'buscarPorCI'])->name('api.user.buscarPorCI');
 Route::get('/vehiculos', [VehicleApiController::class, 'index']);
 Route::post('/eventos', [EventApiController::class, 'store']);
-Route::get('/trip/activo/{userId}', [TripApiController::class, 'getTripActivoPorUsuario']);
+Route::get('/trip/activo/{ci}', [TripApiController::class, 'getTripActivoPorUsuario']);
 Route::post('/gpslocations', [GpsLocationApiController::class, 'store']);

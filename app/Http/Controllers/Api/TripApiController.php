@@ -4,16 +4,25 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Trip;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TripApiController extends Controller
 {
-    public function getTripActivoPorUsuario($userId)
+    public function getTripActivoPorUsuario($ci)
     {
+
+        $user = User::where('ci', $ci)->first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Usuario no encontrado'], 404);
+        }
+
+
         $trip = Trip::with(['route.stops', 'users'])
             ->where('estado', 'activo')
-            ->whereHas('users', function ($query) use ($userId) {
-                $query->where('users.id', $userId);
+            ->whereHas('users', function ($query) use ($user) {
+                $query->where('users.id', $user->id);
             })
             ->first();
 
