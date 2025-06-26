@@ -28,27 +28,12 @@ class EventApiController extends Controller
             'trip_id' => 'nullable|integer',
         ]);
 
-        $existe = Event::where('mensaje', $request->mensaje)
-        ->where('fecha', $request->fecha)
-        ->where('hora', $request->hora)
-        ->where('user_id', $request->user_id)
-        ->where('latitud', $request->latitud)
-        ->where('longitud', $request->longitud)
-        ->exists();
-
-        if ($existe) {
-    FacadesLog::info("🟡 Evento duplicado detectado, se descarta: {$request->mensaje} {$request->hora}");
-    return response()->json([
-        'success' => true
-    ], 200);
-}
-
 
 
         $evento = Event::create($validated);
-FacadesLog::info("🔔 [EventApiController] a punto de broadcast EventCreated ID={$evento->id}");
-broadcast(new EventCreated($evento))->toOthers();
-FacadesLog::info('🔔 [EventApiController] broadcast disparado');
+        FacadesLog::info("🔔 [EventApiController] a punto de broadcast EventCreated ID={$evento->id}");
+        broadcast(new EventCreated($evento))->toOthers();
+        FacadesLog::info('🔔 [EventApiController] broadcast disparado');
 
 
         return response()->json([
