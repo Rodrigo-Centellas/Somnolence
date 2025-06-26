@@ -23,9 +23,17 @@
        style="max-height: calc(100vh - 220px);">
     @forelse($eventos as $evento)
       @php
-        $lvl     = ucfirst(strtolower($evento->nivel));
-        $lvlCol  = $levelContext[$lvl]       ?? 'secondary';
-        $typeCol = $typeContext[$evento->tipo] ?? 'secondary';
+        // Contextos de estilo
+        $lvlKey     = ucfirst(strtolower($evento->nivel ?? ''));
+        $lvlCol     = $levelContext[$lvlKey] ?? 'secondary';
+        $typeCol    = $typeContext[$evento->tipo ?? ''] ?? 'secondary';
+
+        // Valores seguros para placa, ruta y hora
+        $placa      = $evento->trip?->vehicle?->placa ?? '—';
+        $ruta       = $evento->trip?->route?->nombre ?? '—';
+        $horaForm   = $evento->hora
+                      ? \Carbon\Carbon::parse($evento->hora)->format('H:i')
+                      : '--:--';
       @endphp
 
       <div class="card mb-3
@@ -34,29 +42,33 @@
                   rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
           <span class="badge bg-{{ $typeCol }} text-white fw-bold">
-            {{ strtoupper($evento->tipo) }}
+            {{ strtoupper($evento->tipo ?? 'N/A') }}
           </span>
           <small class="fw-bold text-dark">
-            {{ \Carbon\Carbon::parse($evento->hora)->format('H:i') }}
+            {{ $horaForm }}
           </small>
         </div>
         <div class="card-body px-3 py-2 bg-transparent">
           <p class="mb-1 fw-bold text-dark">
-            Vehículo: {{ $evento->trip->vehicle->placa }}
+            Vehículo: {{ $placa }}
           </p>
           <p class="mb-1 fw-bold text-dark">
-            Ruta: {{ $evento->trip->route->nombre }}
+            Ruta: {{ $ruta }}
           </p>
           <p class="mb-2 fw-bold text-dark">
-            Mensaje: {{ $evento->mensaje }}
+            Mensaje: {{ $evento->mensaje ?? '—' }}
           </p>
-          <a href="#"
-             class="fw-bold text-dark view-in-map"
-             data-id="{{ $evento->id }}"
-             data-lat="{{ $evento->latitud }}"
-             data-lng="{{ $evento->longitud }}">
-            Ver en mapa
-          </a>
+          @if($evento->latitud && $evento->longitud)
+            <a href="#"
+               class="fw-bold text-dark view-in-map"
+               data-id="{{ $evento->id }}"
+               data-lat="{{ $evento->latitud }}"
+               data-lng="{{ $evento->longitud }}">
+              Ver en mapa
+            </a>
+          @else
+            <span class="text-muted small">Sin ubicación</span>
+          @endif
         </div>
       </div>
     @empty
