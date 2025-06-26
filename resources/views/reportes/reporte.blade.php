@@ -7,7 +7,7 @@
       <h5>Generar Reporte de Viajes</h5>
     </div>
     <div class="card-body">
-      <form action="{{ route('reportes.viajes.excel') }}" method="GET" class="row g-3">
+      <form action="{{ route('reportes.viajes.index') }}" method="GET" class="row g-3">
         @csrf
 
         <div class="col-md-3">
@@ -55,9 +55,15 @@
         </div>
 
         <div class="col-md-3 d-flex align-items-end">
-          <button type="submit" class="btn btn-success w-100">
-            <i class="fas fa-file-excel"></i> Exportar Excel
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-filter"></i> Filtrar
           </button>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+          <a href="{{ route('reportes.viajes.excel', request()->query()) }}" class="btn btn-success w-100">
+            <i class="fas fa-file-excel"></i> Exportar Excel
+          </a>
         </div>
 
         <div class="col-md-3 d-flex align-items-end">
@@ -76,12 +82,12 @@
     <div class="card-body table-responsive">
       @if(count($viajes) > 0)
       <table class="table table-bordered table-hover">
-        <thead>
+        <thead class="table-light">
           <tr>
             <th>ID</th>
             <th>Ruta</th>
             <th>Vehículo</th>
-            <th>Usuario</th>
+            <th>Usuario(s)</th>
             <th>Fecha Inicio</th>
             <th>Distancia</th>
             <th>Estado</th>
@@ -93,9 +99,11 @@
             <td>{{ $viaje->id }}</td>
             <td>{{ $viaje->route->nombre ?? 'N/A' }}</td>
             <td>{{ $viaje->vehicle->placa ?? 'N/A' }}</td>
-            <td>@foreach ($viaje->users as $usuario)
-    {{ $usuario->nombre }} {{ $usuario->apellido }}<br>
-@endforeach</td>
+            <td>
+              @foreach ($viaje->users as $usuario)
+                {{ $usuario->nombre }} {{ $usuario->apellido }}<br>
+              @endforeach
+            </td>
             <td>{{ $viaje->fecha_inicio }}</td>
             <td>{{ $viaje->distancia_recorrida }} km</td>
             <td>{{ ucfirst($viaje->estado) }}</td>
